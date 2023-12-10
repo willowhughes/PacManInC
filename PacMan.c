@@ -33,7 +33,8 @@ void draw() {
 int main() {
     int x = 0;
 
-    
+    //Test?
+
     while (1) {
         if (x == 0) {
             grid[5][5] = 'C';
