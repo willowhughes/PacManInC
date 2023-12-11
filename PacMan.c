@@ -43,37 +43,38 @@ int main() {
             switch (input) {
                 case 'w':
                     if (row > 0) {
+                        grid[row][col] = ' ';
                         row--;
                     }
                 break;
                 case 'a':
                     if (col > 0) {
+                        grid[row][col] = ' ';
                         col--;
                     }
                 break;
                 case 's':
                     if (row < 9) {
+                        grid[row][col] = ' ';
                         row++;
                     }
                 break;
                 case 'd':
                     if (col < 9) {
+                        grid[row][col] = ' ';
                         col++;
                     }
                 break;
                 case 'q':
                     return 0;
                 }
-
-        if (x == 0) {
             grid[row][col] = 'C';
-            x = 1;
-        } else {
+            draw(grid, i, j);
             grid[row][col] = 'O';
-            x = 0;
+            draw(grid, i, j);
+            Sleep(100);
+            grid[row][col] = 'C';
+            draw(grid, i, j);
         }
-        draw(grid, i, j);
-    }
-    // Sleep(500);
     }
 }
