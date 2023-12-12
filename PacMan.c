@@ -39,31 +39,31 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
     *numMoves = 0;
 
     // Check if moving up is possible
-    if (demonLastMove != DOWN && grid[demonRow - 1][demonCol] != '#') {
+    if (demonLastMove != DOWN && grid[demonRow - 1][demonCol] != '#' && grid[demonRow - 1][demonCol] != 'X') {
         availableMoves[*numMoves] = UP;
         (*numMoves)++;
     }
 
     // Check if moving left is possible
-    if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#') {
+    if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#' && grid[demonRow][demonCol - 1] != 'X') {
         availableMoves[*numMoves] = LEFT;
         (*numMoves)++;
     }
 
     // Check if moving down is possible
-    if (demonLastMove != UP && grid[demonRow + 1][demonCol] != '#') {
+    if (demonLastMove != UP && grid[demonRow + 1][demonCol] != '#' && grid[demonRow + 1][demonCol] != 'X') {
         availableMoves[*numMoves] = DOWN;
         (*numMoves)++;
     }
 
     // Check if moving right is possible
-    if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#') {
+    if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#' && grid[demonRow][demonCol + 1] != 'X') {
         availableMoves[*numMoves] = RIGHT;
         (*numMoves)++;
     }
 }
 
-void demonsNextMove(char grid[31][28], int *demonOneRow, int *demonOneCol, int *demonLastMove) {
+void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonLastMove) {
     // Seed the random number generator
     srand(time(NULL));
 
@@ -72,7 +72,7 @@ void demonsNextMove(char grid[31][28], int *demonOneRow, int *demonOneCol, int *
     int numMoves;
 
     // Get available moves for the demon
-    getAvailableMoves(grid, *demonOneRow, *demonOneCol, *demonLastMove, availableMoves, &numMoves);
+    getAvailableMoves(grid, *demonRow, *demonCol, *demonLastMove, availableMoves, &numMoves);
 
     // Choose the next move based on available options
     int randomIndex;
@@ -85,25 +85,25 @@ void demonsNextMove(char grid[31][28], int *demonOneRow, int *demonOneCol, int *
         //implement checks so demon doesn't eat food
         switch (*demonLastMove) {
             case UP:
-                grid[*demonOneRow][*demonOneCol] = ' ';
-                (*demonOneRow)--;
+                grid[*demonRow][*demonCol] = ' ';
+                (*demonRow)--;
                 break;
             case LEFT:
-                grid[*demonOneRow][*demonOneCol] = ' ';
-                (*demonOneCol)--;
+                grid[*demonRow][*demonCol] = ' ';
+                (*demonCol)--;
                 break;
             case DOWN:
-                grid[*demonOneRow][*demonOneCol] = ' ';
-                (*demonOneRow)++;
+                grid[*demonRow][*demonCol] = ' ';
+                (*demonRow)++;
                 break;
             case RIGHT:
-                grid[*demonOneRow][*demonOneCol] = ' ';
-                (*demonOneCol)++;
+                grid[*demonRow][*demonCol] = ' ';
+                (*demonCol)++;
                 break;
         }
 
         // Update the grid
-        grid[*demonOneRow][*demonOneCol] = 'X';
+        grid[*demonRow][*demonCol] = 'X';
     }
     // If there are no available moves, the demon stays in the current position
 }
@@ -147,7 +147,16 @@ int main() {
     int col = 14;
     int demonOneRow = 15;
     int demonOneCol = 15;
-    int demonLastMove = 1;
+    int demonOneLastMove = 1;
+    int demonTwoRow = 15;
+    int demonTwoCol = 14;
+    int demonTwoLastMove = 2;
+    int demonThreeRow = 15;
+    int demonThreeCol = 13;
+    int demonThreeLastMove = 3;
+    int demonFourRow = 15;
+    int demonFourCol = 12;
+    int demonFourLastMove = 4;
     char input;
     int score = 0;
     int i;
@@ -192,6 +201,9 @@ int main() {
     // grid[14][14] = 'X'; 
     // grid[14][13] = 'X';
     grid[demonOneRow][demonOneCol] = 'X';
+    grid[demonTwoRow][demonTwoCol] = 'X';
+    grid[demonThreeRow][demonThreeCol] = 'X';
+    grid[demonFourRow][demonFourCol] = 'X';
     grid[row][col] = 'C';
     draw(grid, i, j, score, row, col);
 
@@ -247,7 +259,10 @@ int main() {
                 case 'q':
                     return 0;
             }
-            demonsNextMove(grid, &demonOneRow, &demonOneCol, &demonLastMove);
+            demonsNextMove(grid, &demonOneRow, &demonOneCol, &demonOneLastMove);
+            demonsNextMove(grid, &demonTwoRow, &demonTwoCol, &demonTwoLastMove);
+            demonsNextMove(grid, &demonThreeRow, &demonThreeCol, &demonThreeLastMove);
+            demonsNextMove(grid, &demonFourRow, &demonFourCol, &demonFourLastMove);
             if (grid[row][col] == 'X') {
                 pacmanAnimation(grid, row, col, i, j, score);
                 printf("\nGAME OVER");
