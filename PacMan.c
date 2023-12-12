@@ -27,7 +27,15 @@ void draw(char grid[31][28], int i, int j, int score, int row, int col) {
     system("cls");
     for (i = 0; i < 31; i++) {
         for (j = 0; j < 28; j++) {
-            printf("%c ", grid[i][j]);   
+            if (grid[i][j] == 'X') {
+                printf("\033[0;31mX \033[0m");
+            } else if (grid[i][j] == 'C') {
+                printf("\033[0;33mC \033[0m");
+            } else if (grid[i][j] == '#') {
+                printf("\033[0;34m# \033[0m");
+            } else {
+                printf("%c ", grid[i][j]);
+            }     
         }
         printf("\n");
     }
