@@ -45,7 +45,8 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
     }
 
     // Check if moving left is possible
-    if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#' && grid[demonRow][demonCol - 1] != 'X') {
+    if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#' && grid[demonRow][demonCol - 1] != 'X' 
+            && (demonCol - 1) != 5) {
         availableMoves[*numMoves] = LEFT;
         (*numMoves)++;
     }
@@ -57,7 +58,8 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
     }
 
     // Check if moving right is possible
-    if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#' && grid[demonRow][demonCol + 1] != 'X') {
+    if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#' && grid[demonRow][demonCol + 1] != 'X' 
+            && (demonCol + 1) != 22) {
         availableMoves[*numMoves] = RIGHT;
         (*numMoves)++;
     }
