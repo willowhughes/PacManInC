@@ -21,10 +21,8 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
 
     // Check if moving left is possible
     if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#' && grid[demonRow][demonCol - 1] != 'X') {
-        //if (demonRow != 14 && (demonCol - 1) != 5) { //*************this is the stuck bug I think, But removing
-            availableMoves[*numMoves] = LEFT;         //this causes stucking in the teleport dead end and they 
-            (*numMoves)++;                           //still get stuck on eachother
-        //}
+            availableMoves[*numMoves] = LEFT;         
+            (*numMoves)++;                           
     }
 
     // Check if moving down is possible
@@ -35,19 +33,12 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
 
     // Check if moving right is possible
     if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#' && grid[demonRow][demonCol + 1] != 'X') {
-        //if (demonRow != 14 && (demonCol + 1) != 22) {
             availableMoves[*numMoves] = RIGHT;
             (*numMoves)++;
-        //}
     }
 
-
+    if ()
     //implement: if no avail moves, bounce back
-
-    // if (*numMoves == 0) {
-    //     availableMoves[*numMoves] = demonLastMove;
-    //     (*numMoves)++;
-    // }
 }
 
 void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonLastMove) {
@@ -72,7 +63,11 @@ void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonL
                 break;
             case LEFT:
                 grid[*demonRow][*demonCol] = ' ';
-                (*demonCol)--;
+                if (*demonCol == 1) {
+                    *demonCol = 26;
+                } else {
+                    (*demonCol)--;
+                }
                 break;
             case DOWN:
                 grid[*demonRow][*demonCol] = ' ';
@@ -80,7 +75,11 @@ void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonL
                 break;
             case RIGHT:
                 grid[*demonRow][*demonCol] = ' ';
-                (*demonCol)++;
+                if (*demonCol == 26) {
+                    *demonCol = 1;
+                } else {
+                    (*demonCol)++;
+                }
                 break;
         }
 
