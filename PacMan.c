@@ -21,10 +21,10 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
 
     // Check if moving left is possible
     if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#' && grid[demonRow][demonCol - 1] != 'X') {
-        if (demonRow != 14 && (demonCol - 1) != 5) {
-            availableMoves[*numMoves] = LEFT;
-            (*numMoves)++;
-        }
+        //if (demonRow != 14 && (demonCol - 1) != 5) { //*************this is the stuck bug I think, But removing
+            availableMoves[*numMoves] = LEFT;         //this causes stucking in the teleport dead end and they 
+            (*numMoves)++;                           //still get stuck on eachother
+        //}
     }
 
     // Check if moving down is possible
@@ -35,10 +35,10 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
 
     // Check if moving right is possible
     if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#' && grid[demonRow][demonCol + 1] != 'X') {
-        if (demonRow != 14 && (demonCol + 1) != 22) {
+        //if (demonRow != 14 && (demonCol + 1) != 22) {
             availableMoves[*numMoves] = RIGHT;
             (*numMoves)++;
-        }
+        //}
     }
 
 
