@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <conio.h>
+#include <stdbool.h>
 
 // Constants for demon directions
 #define UP 1
@@ -39,35 +40,52 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
     *numMoves = 0;
 
     // Check if moving up is possible
-    if (demonLastMove != DOWN && grid[demonRow - 1][demonCol] != '#' && grid[demonRow - 1][demonCol] != 'X') {
+    if (demonLastMove != DOWN && grid[demonRow - 1][demonCol] != '#') {
         availableMoves[*numMoves] = UP;
         (*numMoves)++;
     }
 
     // Check if moving left is possible
-    if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#' && grid[demonRow][demonCol - 1] != 'X' 
-            && ((demonCol - 1) + demonRow) != 19) {
+    if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#' && ((demonCol - 1) + demonRow) != 19) {
         availableMoves[*numMoves] = LEFT;
         (*numMoves)++;
     }
 
     // Check if moving down is possible
-    if (demonLastMove != UP && grid[demonRow + 1][demonCol] != '#' && grid[demonRow + 1][demonCol] != 'X') {
+    if (demonLastMove != UP && grid[demonRow + 1][demonCol] != '#') {
         availableMoves[*numMoves] = DOWN;
         (*numMoves)++;
     }
 
     // Check if moving right is possible
-    if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#' && grid[demonRow][demonCol + 1] != 'X' 
-            && ((demonCol + 1) + demonRow) != 36) {
+    if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#' && ((demonCol + 1) + demonRow) != 36) {
         availableMoves[*numMoves] = RIGHT;
         (*numMoves)++;
     }
 
-    if (*numMoves == 0) {
-        availableMoves[*numMoves] = demonLastMove;
-        (*numMoves)++;
-    }
+    // // if ran up into wall, make bouncing back down a posibility
+    // if (demonLastMove = 1 && grid[demonRow - 1][demonCol] == '#') {
+    //     availableMoves[*numMoves] = DOWN;
+    //     (*numMoves)++;
+    // }
+
+    // // if ran left into wall, make bouncing back right a posibility
+    // if (demonLastMove = 2 && grid[demonRow][demonCol - 1] == '#') {
+    //     availableMoves[*numMoves] = RIGHT;
+    //     (*numMoves)++;
+    // }
+
+    // // if ran down into wall, make bouncing back up a posibility
+    // if (demonLastMove = 3 && grid[demonRow + 1][demonCol] == '#') {
+    //     availableMoves[*numMoves] = UP;
+    //     (*numMoves)++;
+    // }
+
+    // // if ran right into wall, make bouncing back left a posibility
+    // if (demonLastMove = 4 && grid[demonRow][demonCol + 1] == '#') {
+    //     availableMoves[*numMoves] = LEFT;
+    //     (*numMoves)++;
+    // }
 }
 
 void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonLastMove) {
@@ -183,7 +201,7 @@ int main() {
         {'#', '#', '#', '#', '#', '#', '.', '#', '#', '#', '#', '#', ' ', '#', '#', ' ', '#', '#', '#', '#', '#', '.', '#', '#', '#', '#', '#', '#'} ,
         {' ', ' ', ' ', ' ', ' ', '#', '.', '#', '#', '#', '#', '#', ' ', '#', '#', ' ', '#', '#', '#', '#', '#', '.', '#', ' ', ' ', ' ', ' ', ' '} ,
         {' ', ' ', ' ', ' ', ' ', '#', '.', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '.', '#', ' ', ' ', ' ', ' ', ' '} ,
-        {' ', ' ', ' ', ' ', ' ', '#', '.', '#', '#', ' ', '#', '#', '#', '#', '#', '#', '#', '#', ' ', '#', '#', '.', '#', ' ', ' ', ' ', ' ', ' '} ,
+        {' ', ' ', ' ', ' ', ' ', '#', '.', '#', '#', ' ', '#', '#', '#', ' ', ' ', '#', '#', '#', ' ', '#', '#', '.', '#', ' ', ' ', ' ', ' ', ' '} ,
         {'#', '#', '#', '#', '#', '#', '.', '#', '#', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', ' ', '#', '#', '.', '#', '#', '#', '#', '#', '#'} ,
         {' ', ' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', ' ', ' ', ' ', '.', ' ', ' ', ' ', ' ', ' ', ' '} ,
         {'#', '#', '#', '#', '#', '#', '.', '#', '#', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', ' ', '#', '#', '.', '#', '#', '#', '#', '#', '#'} ,
@@ -279,7 +297,7 @@ int main() {
             }  
             cage++;
             if (cage == 10) {
-                removeCage(grid);
+                //removeCage(grid);
             }
         }
     }
