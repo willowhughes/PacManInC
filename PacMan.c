@@ -10,31 +10,6 @@
 #define DOWN 3
 #define RIGHT 4
 
-void removeCage(char grid[31][28]) {
-    grid[16][10] = ' ';
-    grid[16][11] = ' ';
-    grid[16][12] = ' ';
-    grid[16][13] = ' ';
-    grid[16][14] = ' ';
-    grid[16][15] = ' ';
-    grid[16][16] = ' ';
-    grid[16][17] = ' ';
-    grid[15][10] = ' ';
-    grid[14][10] = ' ';
-    grid[13][10] = ' ';
-    grid[12][10] = ' ';
-    grid[15][17] = ' ';
-    grid[14][17] = ' ';
-    grid[13][17] = ' ';
-    grid[12][17] = ' ';
-    grid[12][16] = ' ';
-    grid[12][15] = ' ';
-    grid[12][14] = ' ';
-    grid[12][13] = ' ';
-    grid[12][12] = ' ';
-    grid[12][11] = ' ';
-}
-
 void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonLastMove, int* availableMoves, int* numMoves) {
     *numMoves = 0;
 
@@ -45,10 +20,11 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
     }
 
     // Check if moving left is possible
-    if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#' && grid[demonRow][demonCol - 1] != 'X' 
-            && ((demonCol - 1) + demonRow) != 19) {
-        availableMoves[*numMoves] = LEFT;
-        (*numMoves)++;
+    if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#' && grid[demonRow][demonCol - 1] != 'X') {
+        if (demonRow != 14 && (demonCol - 1) != 5) {
+            availableMoves[*numMoves] = LEFT;
+            (*numMoves)++;
+        }
     }
 
     // Check if moving down is possible
@@ -58,37 +34,36 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
     }
 
     // Check if moving right is possible
-    if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#' && grid[demonRow][demonCol + 1] != 'X' 
-            && ((demonCol + 1) + demonRow) != 36) {
-        availableMoves[*numMoves] = RIGHT;
-        (*numMoves)++;
+    if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#' && grid[demonRow][demonCol + 1] != 'X') {
+        if (demonRow != 14 && (demonCol + 1) != 22) {
+            availableMoves[*numMoves] = RIGHT;
+            (*numMoves)++;
+        }
     }
 
-    if (*numMoves == 0) {
-        availableMoves[*numMoves] = demonLastMove;
-        (*numMoves)++;
-    }
+
+    //implement: if no avail moves, bounce back
+
+    // if (*numMoves == 0) {
+    //     availableMoves[*numMoves] = demonLastMove;
+    //     (*numMoves)++;
+    // }
 }
 
 void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonLastMove) {
-    // Seed the random number generator
     srand(time(NULL));
 
-    // Array to store available moves
     int availableMoves[4];
     int numMoves;
 
-    // Get available moves for the demon
     getAvailableMoves(grid, *demonRow, *demonCol, *demonLastMove, availableMoves, &numMoves);
 
-    // Choose the next move based on available options
     int randomIndex;
     if (numMoves > 0) {
-        // If there are available moves, pick a random one
         randomIndex = rand() % numMoves;
         *demonLastMove = availableMoves[randomIndex];
 
-        // Move the demon accordingly
+        // Move the demon
         //implement checks so demon doesn't eat food
         switch (*demonLastMove) {
             case UP:
@@ -109,10 +84,8 @@ void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonL
                 break;
         }
 
-        // Update the grid
         grid[*demonRow][*demonCol] = 'X';
     }
-    // If there are no available moves, the demon stays in the current position
 }
 
 void pacmanAnimation(char grid[31][28], int row, int col, int i, int j, int score) {
@@ -168,7 +141,6 @@ int main() {
     int score = 0;
     int i;
     int j;
-    int cage = 1;
 
     char grid[31][28] = {
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'} ,
@@ -183,7 +155,7 @@ int main() {
         {'#', '#', '#', '#', '#', '#', '.', '#', '#', '#', '#', '#', ' ', '#', '#', ' ', '#', '#', '#', '#', '#', '.', '#', '#', '#', '#', '#', '#'} ,
         {' ', ' ', ' ', ' ', ' ', '#', '.', '#', '#', '#', '#', '#', ' ', '#', '#', ' ', '#', '#', '#', '#', '#', '.', '#', ' ', ' ', ' ', ' ', ' '} ,
         {' ', ' ', ' ', ' ', ' ', '#', '.', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '.', '#', ' ', ' ', ' ', ' ', ' '} ,
-        {' ', ' ', ' ', ' ', ' ', '#', '.', '#', '#', ' ', '#', '#', '#', '#', '#', '#', '#', '#', ' ', '#', '#', '.', '#', ' ', ' ', ' ', ' ', ' '} ,
+        {' ', ' ', ' ', ' ', ' ', '#', '.', '#', '#', ' ', '#', '#', '#', ' ', ' ', '#', '#', '#', ' ', '#', '#', '.', '#', ' ', ' ', ' ', ' ', ' '} ,
         {'#', '#', '#', '#', '#', '#', '.', '#', '#', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', ' ', '#', '#', '.', '#', '#', '#', '#', '#', '#'} ,
         {' ', ' ', ' ', ' ', ' ', ' ', '.', ' ', ' ', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', ' ', ' ', ' ', '.', ' ', ' ', ' ', ' ', ' ', ' '} ,
         {'#', '#', '#', '#', '#', '#', '.', '#', '#', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', ' ', '#', '#', '.', '#', '#', '#', '#', '#', '#'} ,
@@ -277,10 +249,6 @@ int main() {
             } else {
                 pacmanAnimation(grid, row, col, i, j, score);
             }  
-            cage++;
-            if (cage == 10) {
-                removeCage(grid);
-            }
         }
     }
 }
