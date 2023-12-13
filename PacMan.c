@@ -37,8 +37,22 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
             (*numMoves)++;
     }
 
-    if ()
     //implement: if no avail moves, bounce back
+    if (*numMoves == 0) {
+        if (demonLastMove == UP) {
+            availableMoves[*numMoves] = DOWN;
+            (*numMoves)++;
+        } else if (demonLastMove == LEFT) {
+            availableMoves[*numMoves] = RIGHT;
+            (*numMoves)++;
+        } else if (demonLastMove == DOWN) {
+            availableMoves[*numMoves] = UP;
+            (*numMoves)++;
+        } else {
+            availableMoves[*numMoves] = LEFT;
+            (*numMoves)++;
+        }
+    }
 }
 
 void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonLastMove) {
