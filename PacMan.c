@@ -8,9 +8,9 @@
 //todo:
 //efficient pacman animations
 //demons dont eat food
-    //deleteFood function (called when pacman visits a food's cordinates)
+    //deleteFood function (called when pacman visits a food's coordinates)
     //isFoodAtCordinates Function (called every time grid is drawn--> ignores places with #, C or X)
-    //how do I print pacman and demons in draw for loop. Pass in cordinates?
+    //how do I print pacman and demons in draw for loop. Pass in coordinates?
 //bug where if the demon and pacman are facing eachother, they can go past eachother
 
 // Constants for demon directions
@@ -80,11 +80,9 @@ void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonL
         // Move the demon
         switch (*demonLastMove) {
             case UP:
-                //grid[*demonRow][*demonCol] = ' ';
                 (*demonRow)--;
                 break;
             case LEFT:
-                //grid[*demonRow][*demonCol] = ' ';
                 if (*demonCol == 1) {
                     *demonCol = 26;
                 } else {
@@ -92,11 +90,9 @@ void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonL
                 }
                 break;
             case DOWN:
-                //grid[*demonRow][*demonCol] = ' ';
                 (*demonRow)++;
                 break;
             case RIGHT:
-                //grid[*demonRow][*demonCol] = ' ';
                 if (*demonCol == 26) {
                     *demonCol = 1;
                 } else {
@@ -104,57 +100,65 @@ void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonL
                 }
                 break;
         }
-
-        //grid[*demonRow][*demonCol] = 'X';
     }
 }
 
-void pacmanAnimation(char grid[31][28], int *row, int *col, int *score, bool isFood[31][28]) {
+int isDemonHere (int i, int j, int demonOneRow, int demonOneCol, int demonTwoRow, 
+                int demonTwoCol, int demonThreeRow, int demonThreeCol, 
+                int demonFourRow, int demonFourCol) {
+    if (i == demonOneRow && j == demonOneCol) {
+        return 1;
+    } else if (i == demonTwoRow && j == demonTwoCol) {
+        return 1;
+    } else if (i == demonThreeRow && j == demonThreeCol) {
+        return 1;
+    } else if (i == demonFourRow && j == demonFourCol) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+void draw(char grid[31][28], int *score, int *row, int *col, bool isFood[31][28], int *demonOneRow, 
+        int *demonOneCol, int *demonTwoRow, int *demonTwoCol, int *demonThreeRow, int *demonThreeCol, 
+        int *demonFourRow, int *demonFourCol) {
+    int i;
+    int j;
+    system("cls");
+    for (i = 0; i < 31; i++) {
+        for (j = 0; j < 28; j++) {
+            if (grid[i][j] == '#') {
+                printf("\033[0;34m# \033[0m");
+            } else if (isDemonHere(i, j, demonOneRow, demonOneCol, demonTwoRow, demonTwoCol, 
+                                    demonThreeRow, demonThreeCol, demonFourRow, demonFourCol)) { 
+                   printf("\033[0;31mX \033[0m");
+            } else if (isFood[i][j] == true) {
+                printf(". ");
+            } else if (i == row && j == col) { 
+                printf("\033[0;33mC \033[0m");
+            } else {
+                printf("  ");
+            }
+        }
+        printf("\n");
+    }
+    printf("\nScore: %d ", score);
+    printf("\nrow: %d\ncol: %d", row, col); //debuging purposes
+}
+
+void pacmanAnimation(char grid[31][28], int *row, int *col, int *score, bool isFood[31][28],
+                    int *demonOneRow, int *demonOneCol, int *demonTwoRow, int *demonTwoCol, 
+                    int *demonThreeRow, int *demonThreeCol, int *demonFourRow, int *demonFourCol) {
     //implement direction detection (^v<>)
     //grid[*row][*col] = 'C';
-    draw(grid, *score, *row, *col, isFood);
+    draw(grid, *score, *row, *col, isFood, *demonOneRow, *demonOneCol, *demonTwoRow, *demonTwoCol, 
+        *demonThreeRow, *demonThreeCol, *demonFourRow, *demonFourCol);
     //removed for preformance
     // grid[row][col] = 'O';
     // draw(grid, i, j, score, row, col);
     // Sleep(100);
     // grid[row][col] = 'C';
     // draw(grid, i, j, score, row, col);
-}
-
-void draw(char grid[31][28], int *score, int *row, int *col, bool isFood[31][28]) {
-    system("cls");
-    for (int i = 0; i < 31; i++) {
-        for (int j = 0; j < 28; j++) {
-            if (isFood[i][j] == true) {
-                printf(". ");
-            } else if (grid[i][j] == '#') {
-                 printf("\033[0;34m# \033[0m");
-            } else if (i == row && j == col) { 
-                printf("\033[0;33mC \033[0m");
-            } else {
-                printf("  ");
-            }
-
-
-        
-            // if (isFood[i][j] == true) {
-            //     printf(". ");
-            // /*} else if (isFood[i][j] == false && i != *row && j != *col) {
-            //     printf(" ");*/
-            // } else if (grid[i][j] == 'X') {
-            //     printf("\033[0;31mX \033[0m");
-            // } else if (i == *row && j == *col) {
-            //     printf("\033[0;33mC \033[0m");
-            // } else if (grid[i][j] == '#') {
-            //     printf("\033[0;34m# \033[0m");
-            // } else {
-            //     printf("%c ", grid[i][j]);
-            // }  
-        }
-        printf("\n");
-    }
-    printf("\nScore: %d ", score);
-    printf("\nrow: %d\ncol: %d", row, col); //debuging purposes
 }
 
 int main() {
@@ -173,6 +177,7 @@ int main() {
     int demonFourRow = 15;
     int demonFourCol = 12;
     int demonFourLastMove = 4;
+    //demonOneRow, demonOneCol, demonTwoRow, demonTwoCol, demonThreeRow, demonThreeCol, demonFourRow, demonFourCol
     char input;
     int score = 0;
     int i;
@@ -201,7 +206,7 @@ int main() {
         {false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false} ,
         {false, true, false, false, false, false, true, false, false, false, false, false, true, false, false, true, false, false, false, false, false, true, false, false, false, false, true, false} ,
         {false, true, false, false, false, false, true, false, false, false, false, false, true, false, false, true, false, false, false, false, false, true, false, false, false, false, true, false} ,
-        {false, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, false} ,
+        {false, true, true, true, false, false, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, false, false, true, true, true, false} ,
         {false, false, false, true, false, false, true, false, false, true, false, false, false, false, false, false, false, false, true, false, false, true, false, false, true, false, false, false} ,
         {false, false, false, true, false, false, true, false, false, true, false, false, false, false, false, false, false, false, true, false, false, true, false, false, true, false, false, false} ,
         {false, true, true, true, true, true, true, false, false, true, true, true, true, false, false, true, true, true, true, false, false, true, true, true, true, true, true, false} ,
@@ -245,15 +250,8 @@ int main() {
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'}
     };
 
-    // grid[14][15] = 'X';
-    // grid[14][14] = 'X'; 
-    // grid[14][13] = 'X';
-    // grid[demonOneRow][demonOneCol] = 'X';
-    // grid[demonTwoRow][demonTwoCol] = 'X';
-    // grid[demonThreeRow][demonThreeCol] = 'X';
-    // grid[demonFourRow][demonFourCol] = 'X';
-    // grid[row][col] = 'C';
-    pacmanAnimation(grid, &row, &col, &score, isFood);
+    pacmanAnimation(grid, &row, &col, &score, isFood, &demonOneRow, &demonOneCol, &demonTwoRow, 
+                    &demonTwoCol, &demonThreeRow, &demonThreeCol, &demonFourRow, &demonFourCol);
 
     while (1) {
         if (_kbhit()) {
@@ -261,7 +259,7 @@ int main() {
             demonsNextMove(grid, &demonTwoRow, &demonTwoCol, &demonTwoLastMove);
             demonsNextMove(grid, &demonThreeRow, &demonThreeCol, &demonThreeLastMove);
             demonsNextMove(grid, &demonFourRow, &demonFourCol, &demonFourLastMove);
-
+            //todo: (does demon cordinate == pacman coordinate) before and after player move
             input = _getch();
 
             switch (input) {
@@ -270,7 +268,7 @@ int main() {
                         if (isFood[row - 1][col] == true) { //if user selected direction is facing food
                             score++;                       //eat food and increase score
                         }
-                        isFood[row - 1][col] = false; //remove food from cordinate (eat)
+                        isFood[row - 1][col] = false; //remove food from coordinate (eat)
                         row--; //move pacman up
                     }
                 break;
@@ -312,12 +310,17 @@ int main() {
                 case 'q':
                     return 0;
             }
+            //todo: (does demon cordinate == pacman coordinate) before and after player move
             if (grid[row][col] == 'X') {
-                pacmanAnimation(grid, &row, &col, &score, isFood);
+                pacmanAnimation(grid, &row, &col, &score, isFood, &demonOneRow, &demonOneCol, 
+                                &demonTwoRow, &demonTwoCol, &demonThreeRow, &demonThreeCol, 
+                                &demonFourRow, &demonFourCol);
                 printf("\nGAME OVER");
                 return 0;
             } else {
-                pacmanAnimation(grid, &row, &col, &score, isFood);
+                pacmanAnimation(grid, &row, &col, &score, isFood, &demonOneRow, &demonOneCol, 
+                                &demonTwoRow, &demonTwoCol, &demonThreeRow, &demonThreeCol, 
+                                &demonFourRow, &demonFourCol);
             }  
         }
     }
