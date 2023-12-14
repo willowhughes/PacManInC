@@ -3,6 +3,16 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <conio.h>
+#include <stdbool.h>
+
+//todo:
+//efficient pacman animations
+//demons dont eat food
+    //location of every food needs to be stored
+        //linked list? boolean hash? Regular function?
+    //deleteFood function (called when pacman visits a food's cordinates)
+    //isFoodAtCordinates Function (called every time grid is drawn--> ignores places with #, C or X)
+//bug where if the demon and pacman are facing eachother, they can go past eachother
 
 // Constants for demon directions
 #define UP 1
@@ -70,6 +80,7 @@ void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonL
 
         // Move the demon
         //implement checks so demon doesn't eat food
+        //
         switch (*demonLastMove) {
             case UP:
                 grid[*demonRow][*demonCol] = ' ';
@@ -101,10 +112,10 @@ void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonL
     }
 }
 
-void pacmanAnimation(char grid[31][28], int row, int col, int i, int j, int score) {
+void pacmanAnimation(char grid[31][28], int *row, int *col, int i, int j, int *score) {
     //implement direction detection (^v<>)
-    grid[row][col] = 'C';
-    draw(grid, i, j, score, row, col);
+    grid[*row][*col] = 'C';
+    draw(grid, i, j, *score, *row, *col);
     //removed for preformance
     // grid[row][col] = 'O';
     // draw(grid, i, j, score, row, col);
@@ -113,7 +124,7 @@ void pacmanAnimation(char grid[31][28], int row, int col, int i, int j, int scor
     // draw(grid, i, j, score, row, col);
 }
 
-void draw(char grid[31][28], int i, int j, int score, int row, int col) {
+void draw(char grid[31][28], int i, int j, int *score, int *row, int *col) {
     system("cls");
     for (i = 0; i < 31; i++) {
         for (j = 0; j < 28; j++) {
@@ -154,6 +165,39 @@ int main() {
     int score = 0;
     int i;
     int j;
+    bool isFood[31][28] = {
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false} ,
+        {false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, false} ,
+        {false, true, false, false, false, false, true, false, false, false, false, false, true, false, false, true, false, false, false, false, false, true, false, false, false, true, false} ,
+        {false, true, false, false, false, false, true, false, false, false, false, false, true, false, false, true, false, false, false, false, false, true, false, false, false, true, false} ,
+        {false, true, false, false, false, false, true, false, false, false, false, true, false, false, true, false, false, false, false, false, true, false, false, false, false, true, false} ,
+        {false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false} ,
+        {false, true, false, false, false, false, true, false, false, true, false, false, false, false, false, false, false, false, true, false, false, true, false, false, false, false, true, false} ,
+        {false, true, false, false, false, false, true, false, false, true, false, false, false, false, false, false, false, false, true, false, false, true, false, false, false, false, true, false} ,
+        {false, true, true, true, true, true, true, false, false, true, true, true, true, false, false, true, true, true, true, false, false, true, true, true, true, true, true, false} ,
+        {false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false} ,
+        {false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false} ,
+        {false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false} ,
+        {false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false} ,
+        {false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false} ,
+        {false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false} ,
+        {false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false} ,
+        {false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false} ,
+        {false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false} ,
+        {false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false} ,
+        {false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false} ,
+        {false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false} ,
+        {false, true, false, false, false, false, true, false, false, false, false, false, true, false, false, true, false, false, false, false, false, true, false, false, false, false, true, false} ,
+        {false, true, false, false, false, false, true, false, false, false, false, false, true, false, false, true, false, false, false, false, false, true, false, false, false, false, true, false} ,
+        {false, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, false} ,
+        {false, false, false, true, false, false, true, false, false, true, false, false, false, false, false, false, false, false, true, false, false, true, false, false, true, false, false, false} ,
+        {false, false, false, true, false, false, true, false, false, true, false, false, false, false, false, false, false, false, true, false, false, true, false, false, true, false, false, false} ,
+        {false, true, true, true, true, true, true, false, false, true, true, true, true, false, false, true, true, true, true, false, false, true, true, true, true, true, true, false} ,
+        {false, true, false, false, false, false, false, false, false, false, false, false, true, false, false, true, false, false, false, false, false, false, false, false, false, false, true, false} ,
+        {false, true, false, false, false, false, false, false, false, false, false, false, true, false, false, true, false, false, false, false, false, false, false, false, false, false, true, false} ,
+        {false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false} ,
+        {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}
+    };
 
     char grid[31][28] = {
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'} ,
@@ -201,6 +245,10 @@ int main() {
 
     while (1) {
         if (_kbhit()) {
+            demonsNextMove(grid, &demonOneRow, &demonOneCol, &demonOneLastMove);
+            demonsNextMove(grid, &demonTwoRow, &demonTwoCol, &demonTwoLastMove);
+            demonsNextMove(grid, &demonThreeRow, &demonThreeCol, &demonThreeLastMove);
+            demonsNextMove(grid, &demonFourRow, &demonFourCol, &demonFourLastMove);
             input = _getch();
 
             switch (input) {
@@ -251,16 +299,12 @@ int main() {
                 case 'q':
                     return 0;
             }
-            demonsNextMove(grid, &demonOneRow, &demonOneCol, &demonOneLastMove);
-            demonsNextMove(grid, &demonTwoRow, &demonTwoCol, &demonTwoLastMove);
-            demonsNextMove(grid, &demonThreeRow, &demonThreeCol, &demonThreeLastMove);
-            demonsNextMove(grid, &demonFourRow, &demonFourCol, &demonFourLastMove);
             if (grid[row][col] == 'X') {
-                pacmanAnimation(grid, row, col, i, j, score);
+                pacmanAnimation(grid, &row, &col, i, j, &score);
                 printf("\nGAME OVER");
                 return 0;
             } else {
-                pacmanAnimation(grid, row, col, i, j, score);
+                pacmanAnimation(grid, &row, &col, i, j, &score);
             }  
         }
     }
