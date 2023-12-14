@@ -129,8 +129,8 @@ void draw(char grid[31][28], int *score, int *row, int *col, bool isFood[31][28]
                 printf(". ");
             } else if (grid[i][j] == '#') {
                  printf("\033[0;34m# \033[0m");
-            // } else if (i == *row && j == *col) { //figure out how 
-            //     printf("\033[0;33mC \033[0m");
+            } else if (i == row && j == col) { 
+                printf("\033[0;33mC \033[0m");
             } else {
                 printf("  ");
             }
