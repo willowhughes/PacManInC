@@ -19,29 +19,40 @@
 #define DOWN 3
 #define RIGHT 4
 
-void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonLastMove, int* availableMoves, int* numMoves) {
+void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonLastMove, 
+                    int* availableMoves, int* numMoves, int *demonOneRow, int *demonOneCol, 
+                    int *demonTwoRow, int *demonTwoCol, int *demonThreeRow, int *demonThreeCol, 
+                    int *demonFourRow, int *demonFourCol) {
     *numMoves = 0;
 
     // Check if moving up is possible
-    if (demonLastMove != DOWN && grid[demonRow - 1][demonCol] != '#' && grid[demonRow - 1][demonCol] != 'X') {
+    if (demonLastMove != DOWN && grid[demonRow - 1][demonCol] != '#' && isDemonHere((demonRow - 1), 
+                                    demonCol, demonOneRow, demonOneCol, demonTwoRow, demonTwoCol, 
+                                    demonThreeRow, demonThreeCol, demonFourRow, demonFourCol) != 1) {
         availableMoves[*numMoves] = UP;
         (*numMoves)++;
     }
 
     // Check if moving left is possible
-    if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#' && grid[demonRow][demonCol - 1] != 'X') {
+    if (demonLastMove != RIGHT && grid[demonRow][demonCol - 1] != '#' && isDemonHere((demonRow), 
+                                    (demonCol - 1), demonOneRow, demonOneCol, demonTwoRow, demonTwoCol, 
+                                    demonThreeRow, demonThreeCol, demonFourRow, demonFourCol) != 1) {
             availableMoves[*numMoves] = LEFT;         
             (*numMoves)++;                           
     }
 
     // Check if moving down is possible
-    if (demonLastMove != UP && grid[demonRow + 1][demonCol] != '#' && grid[demonRow + 1][demonCol] != 'X') {
+    if (demonLastMove != UP && grid[demonRow + 1][demonCol] != '#' && isDemonHere((demonRow + 1), 
+                                    demonCol, demonOneRow, demonOneCol, demonTwoRow, demonTwoCol, 
+                                    demonThreeRow, demonThreeCol, demonFourRow, demonFourCol) != 1) {
         availableMoves[*numMoves] = DOWN;
         (*numMoves)++;
     }
 
     // Check if moving right is possible
-    if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#' && grid[demonRow][demonCol + 1] != 'X') {
+    if (demonLastMove != LEFT && grid[demonRow][demonCol + 1] != '#' && isDemonHere((demonRow), 
+                                    (demonCol + 1), demonOneRow, demonOneCol, demonTwoRow, demonTwoCol, 
+                                    demonThreeRow, demonThreeCol, demonFourRow, demonFourCol) != 1) {
             availableMoves[*numMoves] = RIGHT;
             (*numMoves)++;
     }
@@ -64,13 +75,17 @@ void getAvailableMoves(char grid[31][28], int demonRow, int demonCol, int demonL
     }
 }
 
-void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonLastMove) {
+void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonLastMove, 
+        int *demonOneRow, int *demonOneCol, int *demonTwoRow, int *demonTwoCol, int *demonThreeRow, 
+        int *demonThreeCol, int *demonFourRow, int *demonFourCol) {
     srand(time(NULL));
 
     int availableMoves[4];
     int numMoves;
 
-    getAvailableMoves(grid, *demonRow, *demonCol, *demonLastMove, availableMoves, &numMoves);
+    getAvailableMoves(grid, *demonRow, *demonCol, *demonLastMove, availableMoves, &numMoves, 
+                    *demonOneRow, *demonOneCol, *demonTwoRow, *demonTwoCol, *demonThreeRow, 
+                    *demonThreeCol, *demonFourRow, *demonFourCol);
 
     int randomIndex;
     if (numMoves > 0) {
@@ -255,10 +270,18 @@ int main() {
 
     while (1) {
         if (_kbhit()) {
-            demonsNextMove(grid, &demonOneRow, &demonOneCol, &demonOneLastMove);
-            demonsNextMove(grid, &demonTwoRow, &demonTwoCol, &demonTwoLastMove);
-            demonsNextMove(grid, &demonThreeRow, &demonThreeCol, &demonThreeLastMove);
-            demonsNextMove(grid, &demonFourRow, &demonFourCol, &demonFourLastMove);
+            demonsNextMove(grid, &demonOneRow, &demonOneCol, &demonOneLastMove, &demonOneRow, 
+                        &demonOneCol, &demonTwoRow, &demonTwoCol, &demonThreeRow, &demonThreeCol, 
+                        &demonFourRow, &demonFourCol);
+            demonsNextMove(grid, &demonTwoRow, &demonTwoCol, &demonTwoLastMove, &demonOneRow, 
+                        &demonOneCol, &demonTwoRow, &demonTwoCol, &demonThreeRow, &demonThreeCol, 
+                        &demonFourRow, &demonFourCol);
+            demonsNextMove(grid, &demonThreeRow, &demonThreeCol, &demonThreeLastMove, &demonOneRow, 
+                        &demonOneCol, &demonTwoRow, &demonTwoCol, &demonThreeRow, &demonThreeCol, 
+                        &demonFourRow, &demonFourCol);
+            demonsNextMove(grid, &demonFourRow, &demonFourCol, &demonFourLastMove, &demonOneRow, 
+                        &demonOneCol, &demonTwoRow, &demonTwoCol, &demonThreeRow, &demonThreeCol, 
+                        &demonFourRow, &demonFourCol);
             //todo: (does demon cordinate == pacman coordinate) before and after player move
             input = _getch();
 
