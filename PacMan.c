@@ -10,7 +10,6 @@
 //demons dont eat food
     //deleteFood function (called when pacman visits a food's cordinates)
     //isFoodAtCordinates Function (called every time grid is drawn--> ignores places with #, C or X)
-
     //how do I print pacman and demons in draw for loop. Pass in cordinates?
 //bug where if the demon and pacman are facing eachother, they can go past eachother
 
@@ -112,7 +111,7 @@ void demonsNextMove(char grid[31][28], int *demonRow, int *demonCol, int *demonL
 
 void pacmanAnimation(char grid[31][28], int *row, int *col, int *score, bool isFood[31][28]) {
     //implement direction detection (^v<>)
-    grid[*row][*col] = 'C';
+    //grid[*row][*col] = 'C';
     draw(grid, *score, *row, *col, isFood);
     //removed for preformance
     // grid[row][col] = 'O';
@@ -130,8 +129,8 @@ void draw(char grid[31][28], int *score, int *row, int *col, bool isFood[31][28]
                 printf(". ");
             } else if (grid[i][j] == '#') {
                  printf("\033[0;34m# \033[0m");
-            } else if (i == *row && j == *col) { //figure out how 
-                printf("\033[0;33mC \033[0m");
+            // } else if (i == *row && j == *col) { //figure out how 
+            //     printf("\033[0;33mC \033[0m");
             } else {
                 printf("  ");
             }
@@ -160,7 +159,6 @@ void draw(char grid[31][28], int *score, int *row, int *col, bool isFood[31][28]
 
 int main() {
 
-    int x = 0;
     int row = 23;
     int col = 14;
     int demonOneRow = 15;
@@ -250,12 +248,12 @@ int main() {
     // grid[14][15] = 'X';
     // grid[14][14] = 'X'; 
     // grid[14][13] = 'X';
-    grid[demonOneRow][demonOneCol] = 'X';
-    grid[demonTwoRow][demonTwoCol] = 'X';
-    grid[demonThreeRow][demonThreeCol] = 'X';
-    grid[demonFourRow][demonFourCol] = 'X';
-    grid[row][col] = 'C';
-    draw(grid, score, row, col, isFood);
+    // grid[demonOneRow][demonOneCol] = 'X';
+    // grid[demonTwoRow][demonTwoCol] = 'X';
+    // grid[demonThreeRow][demonThreeCol] = 'X';
+    // grid[demonFourRow][demonFourCol] = 'X';
+    // grid[row][col] = 'C';
+    pacmanAnimation(grid, &row, &col, &score, isFood);
 
     while (1) {
         if (_kbhit()) {
@@ -263,6 +261,7 @@ int main() {
             demonsNextMove(grid, &demonTwoRow, &demonTwoCol, &demonTwoLastMove);
             demonsNextMove(grid, &demonThreeRow, &demonThreeCol, &demonThreeLastMove);
             demonsNextMove(grid, &demonFourRow, &demonFourCol, &demonFourLastMove);
+
             input = _getch();
 
             switch (input) {
@@ -323,9 +322,3 @@ int main() {
         }
     }
 }
-
-
-    //check upleftdownright (1234)
-    //elliminate posibilities based on walls
-    //check demonLastMove value to eliminate that from next move
-    //generate random move value from remaining moves
