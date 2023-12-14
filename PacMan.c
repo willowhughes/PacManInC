@@ -5,13 +5,13 @@
 #include <conio.h>
 #include <stdbool.h>
 
+//would have done in hindsight:
+//some documentation
+//made the number of demons dynamic
+//made all the grids a boolean array for efficiency and object-like properties
+
 //todo:
 //efficient pacman animations
-//demons dont eat food
-    //deleteFood function (called when pacman visits a food's coordinates)
-    //isFoodAtCordinates Function (called every time grid is drawn--> ignores places with #, C or X)
-    //how do I print pacman and demons in draw for loop. Pass in coordinates?
-//bug where if the demon and pacman are facing eachother, they can go past eachother
 
 // Constants for demon directions
 #define UP 1
@@ -282,6 +282,14 @@ int main() {
             demonsNextMove(grid, &demonFourRow, &demonFourCol, &demonFourLastMove, &demonOneRow, 
                         &demonOneCol, &demonTwoRow, &demonTwoCol, &demonThreeRow, &demonThreeCol, 
                         &demonFourRow, &demonFourCol);
+            if (isDemonHere(row, col, demonOneRow, demonOneCol, demonTwoRow, demonTwoCol, 
+                            demonThreeRow, demonThreeCol, demonFourRow, demonFourCol)) {
+                printf("\nGAME OVER");
+                Sleep(2000);
+                system("cls");
+                printf("\nGAME OVER\nScore: %d ", score);
+                return 0;
+            }
             //todo: (does demon cordinate == pacman coordinate) before and after player move
             input = _getch();
 
@@ -334,11 +342,15 @@ int main() {
                     return 0;
             }
             //todo: (does demon cordinate == pacman coordinate) before and after player move
-            if (grid[row][col] == 'X') {
+            if (isDemonHere(row, col, demonOneRow, demonOneCol, demonTwoRow, demonTwoCol, 
+                            demonThreeRow, demonThreeCol, demonFourRow, demonFourCol)) {
                 pacmanAnimation(grid, &row, &col, &score, isFood, &demonOneRow, &demonOneCol, 
                                 &demonTwoRow, &demonTwoCol, &demonThreeRow, &demonThreeCol, 
                                 &demonFourRow, &demonFourCol);
                 printf("\nGAME OVER");
+                Sleep(2000);
+                system("cls");
+                printf("\nGAME OVER\nScore: %d ", score);
                 return 0;
             } else {
                 pacmanAnimation(grid, &row, &col, &score, isFood, &demonOneRow, &demonOneCol, 
