@@ -192,7 +192,6 @@ int main() {
     int demonFourRow = 15;
     int demonFourCol = 12;
     int demonFourLastMove = 4;
-    //demonOneRow, demonOneCol, demonTwoRow, demonTwoCol, demonThreeRow, demonThreeCol, demonFourRow, demonFourCol
     char input;
     int score = 0;
     int i;
@@ -290,7 +289,6 @@ int main() {
                 printf("\nGAME OVER\nScore: %d ", score);
                 return 0;
             }
-            //todo: (does demon cordinate == pacman coordinate) before and after player move
             input = _getch();
 
             switch (input) {
@@ -341,7 +339,6 @@ int main() {
                 case 'q':
                     return 0;
             }
-            //todo: (does demon cordinate == pacman coordinate) before and after player move
             if (isDemonHere(row, col, demonOneRow, demonOneCol, demonTwoRow, demonTwoCol, 
                             demonThreeRow, demonThreeCol, demonFourRow, demonFourCol)) {
                 pacmanAnimation(grid, &row, &col, &score, isFood, &demonOneRow, &demonOneCol, 
